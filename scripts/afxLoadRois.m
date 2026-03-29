@@ -19,7 +19,6 @@ function roiData = afxLoadRois(rois, connectome, gmMask)
             otherwise
                 error('Unknown roi type: %s', rois(i).type);
         end
-        
     end
 
     % gm masking
