@@ -67,7 +67,7 @@ https://doi.org/10.7910/DVN/KKTJQC
    connectomes/GSP1000/
    ```
 
-2. Run the provided helper script:
+2. Adjust and run the provided helper script:
 
    ```matlab
    connectomes/GSP1000/prepare.m
