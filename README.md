@@ -222,8 +222,9 @@ Example:
 * Typically: **0.5 – 3 hours**
 * Depends strongly on:
 
-  * number of ROIs
   * disk speed (SSD highly recommended)
+  * CPU
+  * number of ROIs
 
 ---
 
@@ -242,7 +243,7 @@ Approximate RAM requirement:
 | 500    | ~1.45 GB  |
 | 1,000  | ~2.6 GB   |
 | 5,000  | ~11.8 GB  |
-| 1,0000 | ~23.3 GB  |
+| 10,000 | ~23.3 GB  |
 
 ---
 
