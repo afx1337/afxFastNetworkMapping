@@ -76,7 +76,8 @@ function afxFastNetworkMapping(connectomeFile, rois, options, destFolder)
     [rois.size] = deal(siz{:});
     meta = afxMetaData();
     meta.totalTimeMin = toc(t0)/60;
-    save(fullfile(destFolder,'info.mat'), 'connectomeFile', 'rois', 'options', 'meta')
+    save(fullfile(destFolder,'info.mat'), 'connectomeFile', 'options', 'meta', 'rois');
+	afxWriteVarsJSON(fullfile(destFolder,'info.json'), 'connectomeFile', 'options', 'meta', 'rois');
     
     fprintf('\nTotal time: %.1f minutes\n\n',meta.totalTimeMin);
 end
