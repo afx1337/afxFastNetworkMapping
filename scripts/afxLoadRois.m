@@ -5,6 +5,9 @@ function roiData = afxLoadRois(rois, connectome, gmMask)
     atlasCache = struct('file',[],'dat',[]);
     
     % load/generate roi masks
+    progress1pct = numel(rois) * .01;
+    lastLen = afxPrintProgress(20, 0, 0, 0);
+    t = tic;
     for i = 1:numel(rois)
         switch (rois(i).type)
             case 'sphere'
@@ -18,6 +21,11 @@ function roiData = afxLoadRois(rois, connectome, gmMask)
                 roiData(:,i) = abs(atlasCache.dat - rois(i).pick) < .5;
             otherwise
                 error('Unknown roi type: %s', rois(i).type);
+        end
+        
+        % progress bar
+        if mod(i,progress1pct) < 1
+            lastLen = afxPrintProgress(20, round(i/progress1pct), toc(t)/60, lastLen);
         end
     end
 

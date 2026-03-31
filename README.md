@@ -28,9 +28,10 @@ The tool is optimized for high-throughput analysis with hundreds to thousands of
 
 * MATLAB (tested with R2018b and newer; likely compatible with older versions)
 * No MATLAB toolboxes required
+* not tested with GNU Octave
 * Dependency:
 
-  * SPM12
+  * SPM12 (https://www.fil.ion.ucl.ac.uk/spm/software/spm12/)
 
 Tested on:
 
@@ -88,9 +89,6 @@ as input to the pipeline.
 ## Quick Start
 
 ```matlab
-clear
-clc
-
 connectome = 'connectomes/GSP1000/dataset_info.mat';
 
 rois(1).name = '10';
@@ -145,12 +143,13 @@ Struct array describing regions of interest:
 
 #### `options`
 
-| Field             | Description                                                         |
-| ----------------- | ------------------------------------------------------------------- |
-| `gmMask`          | Optional gray matter mask applied to all ROIs                       |
-| `compressNii`     | Save NIfTI files as compressed (`true/false`)                       |
-| `targetRois`      | If set: compute ROI-to-ROI connectivity instead of whole-brain maps |
-| `maxParticipants` | Limit number of subjects (useful for testing)                       |
+| Field               | Description                                                         | Default |
+| ------------------- | ------------------------------------------------------------------- | ------- |
+| `gmMask`            | Optional gray matter mask applied to all ROIs                       | `[]`    |
+| `compressNii`       | Save NIfTI files compressed *.nii.gz (`true/false`)                 | `false` |
+| `targetRois`        | If set: compute ROI-to-ROI connectivity instead of whole-brain maps | `[]`    |
+| `targetRoisMasking` | Apply gmMask to targetRois (`true/false`)                           | `true`  |
+| `maxParticipants`   | Limit number of subjects (useful for testing)                       | `Inf`   |
 
 **Notes:**
 
@@ -180,6 +179,8 @@ Output directory.
 ### Case 2: ROI-to-ROI connectivity
 
 * `conn.mat` → connectivity matrix
+* rows correspond to `options.targetRois`
+* columns correspond to `rois`
 
 ---
 
@@ -206,8 +207,7 @@ The output values represent:
 ### Typical use cases
 
 * Lesion Network Mapping (LNM)
-* Deep Brain Stimulation (DBS) connectivity analysis
-* Resting-state fMRI connectivity studies
+* Deep Brain Stimulation (DBS) connectivity analyses
 
 Example:
 
@@ -230,7 +230,7 @@ Example:
 
 ### Memory usage
 
-Approximate RAM requirement:
+Approximate RAM requirement (using GSP1000 connectome):
 
 ```
 ~300 MB base + 2.3 MB per ROI
@@ -240,7 +240,7 @@ Approximate RAM requirement:
 | ------ | --------- |
 | 50     | ~415 MB   |
 | 250    | ~875 MB   |
-| 500    | ~1.45 GB  |
+| 500    | ~1.5 GB   |
 | 1,000  | ~2.6 GB   |
 | 5,000  | ~11.8 GB  |
 | 10,000 | ~23.3 GB  |

@@ -6,27 +6,29 @@ function afxFastNetworkMapping(connectomeFile, rois, options, destFolder)
     % target connectivity. Computation times depend on used hardware, but are mostly
     % in the range of 0.5 - 3 hours for typical setups and up to several 1,000 ROIs.
     %
-    % connectomeFile   - LeadDBS compatible connectome file
+    % connectomeFile     - LeadDBS compatible connectome file
     %
-    % rois             - struct array of regions of interest
-    % .name            - name will become filename of nifti
-    % .type            - 'image'|'sphere'|'atlas'
-    % .file            - filname for image or atlas
-    % .coords          - 1x3 vec: MNI coordinates for spheres
-    % .radius          - radius for spheres
-    % .pick            - label for atlas (numeric value)
+    % rois               - struct array of regions of interest
+    % .name              - name will become filename of nifti
+    % .type              - 'image'|'sphere'|'atlas'
+    % .file              - filname for image or atlas
+    % .coords            - 1x3 vec: MNI coordinates for spheres
+    % .radius            - radius for spheres
+    % .pick              - label for atlas (numeric value)
     %
     % options:
-    % .gmMask          - filename of gm mask (default: empty)
-    % .compressNii     - true|false (default: false)
-    % .targetRois      - struct array of target rois (default: empty)
-    %                    no whole brain maps are calculated if set
-    % .maxParticipants - decrease connectome for testing purposes (default: Inf)
+    % .gmMask            - filename of gm mask (default: empty)
+    % .compressNii       - true|false (default: false)
+    % .targetRois        - struct array of target rois (default: empty)
+    %                      no whole brain maps are calculated if set
+    % .targetRoisMasking - true|false: use gmMask for targetRois (default: true)
+    % .maxParticipants   - decrease connectome for testing purposes (default: Inf)
     %
-    % destFolder       - results folder
+    % destFolder         - results folder
     
     if ~isfield(options,'gmMask') options.gmMask = []; end
     if ~isfield(options,'targetRois') options.targetRois = []; end
+    if ~isfield(options,'targetRoisMasking') options.targetRoisMasking = true; end
     if ~isfield(options,'compressNii') options.compressNii = false; end
     if ~isfield(options,'maxParticipants') options.maxParticipants = Inf; end
 
@@ -49,15 +51,22 @@ function afxFastNetworkMapping(connectomeFile, rois, options, destFolder)
     end
     
     % load roi masks
+    fprintf('\nLoading ROIs ...\n');
     roiData = afxLoadRois(rois, connectome, gmMask);
     if ~isempty(options.targetRois)
-        targetRoiData = afxLoadRois(options.targetRois, connectome, gmMask);
+
+        if options.targetRoisMasking
+            gmMaskTarget = gmMask;
+        else
+            gmMaskTarget = [];
+        end
+        targetRoiData = afxLoadRois(options.targetRois, connectome, gmMaskTarget);
     else
         targetRoiData = [];
     end
 
     % network mapping
-    fprintf('\nNetwork mapping ...\n  ');
+    fprintf('\nNetwork mapping ...\n');
     conn = afxConn(connectome, roiData, targetRoiData, nParticipants);
 
     % saving
@@ -75,9 +84,9 @@ function afxFastNetworkMapping(connectomeFile, rois, options, destFolder)
     siz = num2cell(sum(roiData,1));
     [rois.size] = deal(siz{:});
     meta = afxMetaData();
-    meta.totalTimeMin = toc(t0)/60;
+    meta.totalTimeMin = round(toc(t0)/60,2);
     save(fullfile(destFolder,'info.mat'), 'connectomeFile', 'options', 'meta', 'rois');
-	afxWriteVarsJSON(fullfile(destFolder,'info.json'), 'connectomeFile', 'options', 'meta', 'rois');
+	afxWriteVarsJSON(fullfile(destFolder,'info.json'), connectomeFile, options, meta, rois);
     
     fprintf('\nTotal time: %.1f minutes\n\n',meta.totalTimeMin);
 end
