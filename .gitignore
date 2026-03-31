@@ -1,5 +1,7 @@
 connectomes/*/*.mat
 connectomes/GSP1000/*.pdf
+connectomes/GSP1000/*.nii
+connectomes/GSP1000/*.nii.gz
 results/*/
 *.asv
 *.m~
