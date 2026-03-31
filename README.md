@@ -11,13 +11,11 @@ The tool is optimized for high-throughput analysis with hundreds to thousands of
 * Fast seed-to-whole-brain connectivity mapping
 * Seed-to-target (ROI-to-ROI) connectivity analysis
 * Supports multiple ROI definitions:
-
   * NIfTI masks (`image`)
   * Spherical ROIs (`sphere`)
   * Atlas-based ROIs (`atlas`)
 * Efficient handling of large ROI sets (up to several thousand)
 * Outputs:
-
   * Whole-brain NIfTI connectivity maps
   * ROI-to-ROI connectivity matrices
   * Metadata (`.mat` and `.json`)
@@ -30,7 +28,6 @@ The tool is optimized for high-throughput analysis with hundreds to thousands of
 * No MATLAB toolboxes required
 * not tested with GNU Octave
 * Dependency:
-
   * SPM12 (https://www.fil.ion.ucl.ac.uk/spm/software/spm12/)
 
 Tested on:
@@ -56,9 +53,7 @@ This tool requires a Lead-DBS compatible normative connectome.
 
 ### Download
 
-Download the GSP1000 connectome dataset from:
-
-https://doi.org/10.7910/DVN/KKTJQC
+Download the GSP1000 connectome dataset from: https://doi.org/10.7910/DVN/KKTJQC
 
 ### Setup
 
@@ -80,7 +75,7 @@ https://doi.org/10.7910/DVN/KKTJQC
    connectomes/GSP1000/dataset_info.mat
    ```
 
-as input to the pipeline.
+   as input to the pipeline.
 
 > Note: The implementation is tested with GSP1000 but should work with other Lead-DBS compatible connectomes.
 
@@ -170,7 +165,6 @@ Output directory.
 
 * One NIfTI file per ROI
 * Each voxel contains:
-
   * Fisher z-transformed correlation coefficient
   * Averaged across all subjects
 
@@ -221,7 +215,6 @@ Example:
 
 * Typically: **0.5 – 3 hours**
 * Depends strongly on:
-
   * disk speed (SSD highly recommended)
   * CPU
   * number of ROIs
@@ -260,8 +253,7 @@ Approximate RAM requirement (using GSP1000 connectome):
 * Designed for Lead-DBS compatible connectomes
 * Tested with GSP1000
 * Other connectomes may work if they follow the same structure
-
-For details on connectome structure, refer to Lead-DBS documentation.
+* For details on connectome structure, refer to Lead-DBS documentation
 
 ---
 
