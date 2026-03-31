@@ -76,7 +76,7 @@ function afxFastNetworkMapping(connectomeFile, rois, options, destFolder)
         save(fullfile(destFolder,'conn.mat'),'conn');
     else
         % save all roi maps
-        fprintf('\nWrite data to disk ...\n  ');
+        fprintf('\nWrite data to disk ...\n');
         rois = afxSaveNetworkMaps(conn,connectome.vol.outidx,connectome.vol.space.dim,connectome.vol.space.mat,rois,options.compressNii,destFolder);
     end
     
