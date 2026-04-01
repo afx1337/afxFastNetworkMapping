@@ -44,11 +44,11 @@ function [meanZ] = afxConn(connectome, roiData, targetRoiData, nParticipants)
         z = atanh(z);
         
         % Welford algorithm
-        N = N + 1;
-        %delta = z - mean;
-        %mean = mean + delta / N;
-        %var = var + delta .* (X - mean);
-        meanZ = meanZ + (z - meanZ) / N;
+        %N = N + 1;
+        %delta = z - meanZ;
+        %meanZ = meanZ + delta / N;
+        %var = var + delta .* (z - meanZ);
+        meanZ = meanZ + (z - meanZ) / iParticipant;
         
         % progress bar
         if mod(totRun,progress1pct) < 1
