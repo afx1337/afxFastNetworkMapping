@@ -1,4 +1,20 @@
-function [meanZ] = afxConn(connectome, roiData, targetRoiData, nParticipants)
+function meanZ = afxConn(connectome, roiData, targetRoiData, nParticipants)
+    % meanZ = afxConn(connectome, roiData, targetRoiData, nParticipants)
+    %
+    % Calculates functional connectivity across whole connectomes.
+    % Two strategies are supported depending on the value in
+    % connectome.isScaled:
+    %
+    %  false (default)  1. scale data per participant (mean = 0, 2-norm = 1)
+    %                   2. calculate dot products (=Pearson correlation)
+    %                   3. fisher transformation
+    %                   4. streaming mean across runs
+    %
+    %  true             1. calculate raw dot products
+    %                   2. sum across bathces
+    %                   3. fisher transformation
+    
+    if ~isfield(connectome,'isScaled') connectome.isScaled = false; end
 
     % initialize group mean (total ram usage per roi ~ 2.2 Mb)
     if ~isempty(targetRoiData)
@@ -13,7 +29,8 @@ function [meanZ] = afxConn(connectome, roiData, targetRoiData, nParticipants)
     lastLen = afxPrintProgress(20, 0, 0, 0);
     totRun = 0;
     t = tic;
-    for iParticipant = 1:nParticipants        
+
+    for iParticipant = 1:nParticipants
         % load preprocessed bold signal for all available runs
         boldBrain = [];
         for iRun = 2:numel(connectome.vol.subIDs{iParticipant})
@@ -28,28 +45,30 @@ function [meanZ] = afxConn(connectome, roiData, targetRoiData, nParticipants)
             boldBrain = boldBrain * targetRoiData;
         end
         
-        % prepare calculation
-        if ~isfield(connectome,'isScaled') || ~connectome.isScaled
+        % prepare calculations
+        if ~connectome.isScaled
             boldRois = boldRois - mean(boldRois);
             boldRois = boldRois ./ vecnorm(boldRois);
             boldBrain = boldBrain - mean(boldBrain);
             boldBrain = boldBrain ./ vecnorm(boldBrain);
         else
             boldRois = boldRois ./ sum(roiData); % (mean for scaled data)
+            if ~isempty(targetRoiData)
+                boldBrain = boldBrain ./sum(targetRoiData);
+            end    
         end
         
-        % corrcoeff
+        % corr coefficient
         z =  boldBrain' * boldRois;
         
-        if ~isfield(connectome,'isScaled') || ~connectome.isScaled
+        if ~connectome.isScaled
             % fisher transformation
             z = min(z, 1-1e-9); % -> max(z) = 10.7082
             z = atanh(z);
-            
             % streaming mean
             meanZ = meanZ + (z - meanZ) / iParticipant;            
         else
-            % simple sum when globally scaled to 2-norm of 1
+            % simple sum (for scaled data)
             meanZ = meanZ + z;
         end
         
@@ -59,7 +78,7 @@ function [meanZ] = afxConn(connectome, roiData, targetRoiData, nParticipants)
         end
     end
     
-    if isfield(connectome,'isScaled') && connectome.isScaled
+    if connectome.isScaled
         % fisher transformation
         meanZ = min(meanZ, 1-1e-9); % -> max(z) = 10.7082
         meanZ = atanh(meanZ);
