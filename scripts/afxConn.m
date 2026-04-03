@@ -8,7 +8,6 @@ function [meanZ] = afxConn(connectome, roiData, targetRoiData, nParticipants)
     end
     meanZ = zeros(nVox, size(roiData,2), 'single');
     %var  = zeros(nVox, size(roiData,2), 'single');
-    N = 0;
 
     progress1pct = (numel([connectome.vol.subIDs{1:nParticipants}])-nParticipants) * .01;
     lastLen = afxPrintProgress(20, 0, 0, 0);
@@ -25,16 +24,19 @@ function [meanZ] = afxConn(connectome, roiData, targetRoiData, nParticipants)
         
         % extract roi timeseries
         boldRois = boldBrain * roiData;
-
         if ~isempty(targetRoiData)
             boldBrain = boldBrain * targetRoiData;
         end
         
         % prepare calculation
-        boldRois = boldRois - mean(boldRois);
-        boldRois = boldRois ./ vecnorm(boldRois);
-        boldBrain = boldBrain - mean(boldBrain);
-        boldBrain = boldBrain ./ vecnorm(boldBrain);
+        if ~isfield(connectome,'isScaled') || ~connectome.isScaled
+            boldRois = boldRois - mean(boldRois);
+            boldRois = boldRois ./ vecnorm(boldRois);
+            boldBrain = boldBrain - mean(boldBrain);
+            boldBrain = boldBrain ./ vecnorm(boldBrain);
+        else
+            boldRois = boldRois ./ sum(roiData);
+        end
         
         % corrcoeff
         z =  boldBrain' * boldRois;
@@ -43,17 +45,21 @@ function [meanZ] = afxConn(connectome, roiData, targetRoiData, nParticipants)
         z = min(z, 1-1e-9); % -> max(z) = 10.7082
         z = atanh(z);
         
-        % Welford algorithm
-        %N = N + 1;
-        %delta = z - meanZ;
-        %meanZ = meanZ + delta / N;
-        %var = var + delta .* (z - meanZ);
-        meanZ = meanZ + (z - meanZ) / iParticipant;
+        if ~isfield(connectome,'isScaled') || ~connectome.isScaled
+            % Welford algorithm
+            %N = N + 1;
+            %delta = z - meanZ;
+            %meanZ = meanZ + delta / N;
+            %var = var + delta .* (z - meanZ);
+            meanZ = meanZ + (z - meanZ) / iParticipant;            
+        else
+            meanZ = meanZ + z;
+        end
         
         % progress bar
         if mod(totRun,progress1pct) < 1
             lastLen = afxPrintProgress(20, round(totRun/progress1pct), toc(t)/60, lastLen);
         end
     end
-    %var = var / (N - 1);
+    %var = var / (N - 1); -> could be used for one smaple t-test
 end
