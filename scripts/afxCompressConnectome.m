@@ -38,10 +38,10 @@ function afxCompressConnectome(connectomePtrn, dimensions, nTotal, nComponents, 
     fprintf('Calculating group PCA (MIGP) ...\n');
     
     %% initialize W
-    W = nan((ceil(nComponents/dimensions(1))+1)*dimensions(1),dimensions(2),'single');
+    W = nan((ceil(nComponents*3/dimensions(1))+1)*dimensions(1),dimensions(2),'single');
     i = 1;
     idxEnd = 1;
-    while idxEnd-1 < nComponents+1
+    while idxEnd-1 < nComponents*3+1
         fprintf('Run %i/%i\n',i,nRuns);
         load(fullfile(d(i).folder,d(i).name),'gmtc');
         idxCur = size(gmtc,2);
@@ -61,8 +61,8 @@ function afxCompressConnectome(connectomePtrn, dimensions, nTotal, nComponents, 
         
         %Wc = [W; gmtc'];
         
-        [Utemp, ~] = eigs(double(W(1:idxEnd-1,:)*W(1:idxEnd-1,:)'), nComponents*3, 'largestreal');
-        W(1:nComponents*3,:) = Utemp' * W(1:idxEnd-1,:);
+        [Utemp, ~] = eigs(double(W(1:idxEnd-1,:)*W(1:idxEnd-1,:)'), nComponents*3, 'largestreal');  
+        W(1:nComponents*3,:) = real(Utemp)' * W(1:idxEnd-1,:);
         idxEnd = nComponents*3 + 1;
     end
     
