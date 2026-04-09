@@ -24,7 +24,7 @@ The tool is optimized for high-throughput analysis with hundreds to thousands of
 
 ## Requirements
 
-* MATLAB (tested with R2018b and newer; likely compatible with older versions)
+* MATLAB (tested with R2017b and newer; likely compatible with older versions)
 * No MATLAB toolboxes required
 * not tested with GNU Octave
 * Dependency:
@@ -49,13 +49,15 @@ addpath('scripts');
 
 ## Connectome Data (Required)
 
-This tool requires a Lead-DBS compatible normative connectome.
+This tool requires a compatible normative connectome. You can either use connectomes compiled for Lead-DBS (in *.mat format) or connectomes compiled specifically for afxFastNetworkMapping. Connectomes can be represented by prerpocessed BOLD timeseries or by low rank matrix approximations using (truncated) principal component analysis. A function for calculating low rank matrix approximations of connectomes can be found in the source code (```afxCompressConnectomeIndividual()```).
 
-### Download
+### GSP100
 
-Download the GSP1000 connectome dataset from: https://doi.org/10.7910/DVN/KKTJQC
+#### Download
 
-### Setup
+Download the GSP1000 connectome dataset for Lead-DBS from: https://doi.org/10.7910/DVN/KKTJQC
+
+#### Setup
 
 1. Place the downloaded data in:
 
@@ -250,10 +252,10 @@ Approximate RAM requirement (using GSP1000 connectome):
 
 ## Notes on Connectomes
 
-* Designed for Lead-DBS compatible connectomes
-* Tested with GSP1000
+* Designed for Lead-DBS compatible or dedicated afxFastNetworkMapping connectomes
+* Tested with GSP1000(https://doi.org/10.7910/DVN/KKTJQC)
 * Other connectomes may work if they follow the same structure
-* For details on connectome structure, refer to Lead-DBS documentation
+* For details on connectome structure, check the source code
 
 ---
 
