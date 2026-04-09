@@ -54,7 +54,6 @@ function afxFastNetworkMapping(connectomeFile, rois, options, destFolder)
     fprintf('\nLoading ROIs ...\n');
     roiData = afxLoadRois(rois, connectome, gmMask);
     if ~isempty(options.targetRois)
-
         if options.targetRoisMasking
             gmMaskTarget = gmMask;
         else
