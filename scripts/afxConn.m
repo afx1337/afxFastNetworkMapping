@@ -42,7 +42,7 @@ function meanZ = afxConn(connectome, roiData, targetRoiData, nParticipants)
             % Norm ROIs
             GR = G * R;
             sigma_roi = sqrt(sum(R .* GR, 1));
-            sigma_roi(sigma_roi < eps) = eps;
+            sigma_roi(sigma_roi < eps) = NaN;
 
             if ~isempty(targetRoiData)
                 % new "target" V in Roi-2-Roi mode
@@ -52,7 +52,7 @@ function meanZ = afxConn(connectome, roiData, targetRoiData, nParticipants)
             % Norm voxels/targets
             VG = V * G;
             sigma_target = sqrt(sum(VG .* V, 2));
-            sigma_target(sigma_target < eps) = eps;
+            sigma_target(sigma_target < eps) = NaN;
             
             % correlation
             z = V * GR ./ (sigma_target * sigma_roi);
