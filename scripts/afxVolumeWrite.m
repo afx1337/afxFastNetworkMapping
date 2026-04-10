@@ -3,7 +3,6 @@ function fname = afxVolumeWrite(fname,y,dim,dt,mat,descrip,slopeScaling)
     %
     % dt ... uint8, int16*, int32, float32, float64, int8, uint16, uint32
 	
-    if ~exist('compress','var'), compress = false; end
     if ~exist('slopeScaling','var'), slopeScaling = true; end
     if ~exist('descrip','var'), descrip = 'afxVolumeWrite'; end
     Vo = spm_vol();

@@ -1,12 +1,13 @@
 function afxFastNetworkMapping(connectomeFile, rois, options, destFolder)
     % afxFastNetworkMapping(connectomeFile, rois, options, destFolder)
     %
-    % A very fast network mapping implementation compatible with LeadDBS connectomes
-    % (tested with GSP1000).     % Features mean seed to whole brain and seed to
-    % target connectivity. Computation times depend on used hardware, but are mostly
-    % in the range of 0.5 - 3 hours for typical setups and up to several 1,000 ROIs.
+    % A very fast network mapping implementation compatible with LeadDBS
+    % (tested with GSP1000) and afxNetworkMapping connectomes.
+    % Features mean seed to whole brain and seed to  target connectivity.
+    % Computation times depend on used hardware, but are mostly in the range of 
+    % 0.5 - 3 hours for typical setups and up to several 1,000 ROIs.
     %
-    % connectomeFile     - LeadDBS compatible connectome file
+    % connectomeFile     - Compatible connectome file
     %
     % rois               - struct array of regions of interest
     % .name              - name will become filename of nifti
