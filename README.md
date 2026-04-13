@@ -1,6 +1,6 @@
 # afxFastNetworkMapping
 
-A fast MATLAB implementation for large-scale functional connectivity mapping using normative connectomes (compatible with Lead-DBS formats, tested with GSP1000).
+A fast MATLAB implementation for large-scale functional connectivity mapping using normative connectomes (compatible with Lead-DBS formats, tested with GSP1000 and dedicated afxNetworkMapping connectomes).
 
 The tool is optimized for high-throughput analysis with hundreds to thousands of regions of interest (ROIs) and supports both whole-brain connectivity mapping and ROI-to-ROI connectivity analysis.
 
@@ -14,7 +14,7 @@ The tool is optimized for high-throughput analysis with hundreds to thousands of
   * NIfTI masks (`image`)
   * Spherical ROIs (`sphere`)
   * Atlas-based ROIs (`atlas`)
-* Efficient handling of large ROI sets (up to several thousand)
+* Efficient handling of large ROI sets (up to several thousands)
 * Outputs:
   * Whole-brain NIfTI connectivity maps
   * ROI-to-ROI connectivity matrices
@@ -29,6 +29,7 @@ The tool is optimized for high-throughput analysis with hundreds to thousands of
 * not tested with GNU Octave
 * Dependency:
   * SPM12 (https://www.fil.ion.ucl.ac.uk/spm/software/spm12/)
+* Connectome data (see below)
 
 Tested on:
 
@@ -55,7 +56,7 @@ This tool requires a compatible normative connectome. You can either use connect
 
 #### Download
 
-Download the GSP1000 connectome dataset for Lead-DBS from: https://doi.org/10.7910/DVN/KKTJQC
+Download the GSP1000 connectome dataset for Lead-DBS from: https://doi.org/10.7910/DVN/KKTJQC (203 GB)
 
 #### Setup
 
@@ -119,7 +120,7 @@ afxFastNetworkMapping(connectomeFile, rois, options, destFolder)
 
 #### `connectomeFile`
 
-Path to a Lead-DBS compatible connectome (e.g. `dataset_info.mat`).
+Path to a compatible connectome (e.g. `dataset_info.mat`).
 
 ---
 
@@ -215,11 +216,13 @@ Example:
 
 ### Runtime
 
-* Typically: **0.5 – 3 hours**
+* Native connectomes: **< 0.5 – 3 hours**
+* Compressed connectomes: **< 5 – 30 minutes**
 * Depends strongly on:
   * disk speed (SSD highly recommended)
   * CPU
   * number of ROIs
+  * connectome
 
 ---
 
@@ -246,7 +249,7 @@ Approximate RAM requirement (using GSP1000 connectome):
 
 * CPU-only (no GPU support)
 * No parallelization
-* Disk I/O is often the bottleneck (GSP1000 ≈ 200 GB)
+* Disk I/O is often the bottleneck when using uncompressed connectomes (GSP1000 ≈ 200 GB)
 
 ---
 
@@ -255,6 +258,7 @@ Approximate RAM requirement (using GSP1000 connectome):
 * Designed for Lead-DBS compatible or dedicated afxFastNetworkMapping connectomes
 * Tested with GSP1000(https://doi.org/10.7910/DVN/KKTJQC)
 * Other connectomes may work if they follow the same structure
+* Supports connectomes represented in (tunrcated) PCA latent space
 * For details on connectome structure, check the source code
 
 ---
