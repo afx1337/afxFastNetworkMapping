@@ -256,10 +256,22 @@ Approximate RAM requirement (using GSP1000 connectome):
 ## Notes on Connectomes
 
 * Designed for Lead-DBS compatible or dedicated afxFastNetworkMapping connectomes
-* Tested with GSP1000(https://doi.org/10.7910/DVN/KKTJQC)
+* Tested with GSP1000 (https://doi.org/10.7910/DVN/KKTJQC)
 * Other connectomes may work if they follow the same structure
 * Supports connectomes represented in (tunrcated) PCA latent space
 * For details on connectome structure, check the source code
+
+---
+
+## Licence and citation
+
+This project is licensed under GPL v3.
+
+If you use this toolbox in scientific work, please cite the repository:
+
+```text
+afxFastNetworkMapping (Version x.x). Available at: https://github.com/afx1337/afxFastNetworkMapping
+```
 
 ---
 
